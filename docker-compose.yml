@@ -1,0 +1,63 @@
+version: "3.9"
+
+networks:
+  taskflow-net:
+    driver: bridge
+
+services:
+
+  auth_service:
+    build: ./auth_service
+    container_name: taskflow-auth
+    networks:
+      - taskflow-net
+    env_file:
+      - .env
+    ports:
+      - "5001:5001"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./auth_service:/app
+
+  task-service:
+    build: ./task-service
+    container_name: taskflow-task
+    networks:
+      - taskflow-net
+    env_file:
+      - .env
+    ports:
+      - "5002:5002"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./task-service:/app
+
+  notification-service:
+    build: ./notification-service
+    container_name: taskflow-notif
+    networks:
+      - taskflow-net
+    env_file:
+      - .env
+    ports:
+      - "5003:5003"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./notification-service:/app
+
+  gateway:
+    build: ./gateway
+    container_name: taskflow-gateway
+    networks:
+      - taskflow-net
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./gateway:/app
