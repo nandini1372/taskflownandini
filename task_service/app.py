@@ -4,6 +4,7 @@ from config import Config
 from models import db
 from routes import task_bp
 from math import random
+import pandas as pd 
 
 def create_app():
     app = Flask(__name__)
